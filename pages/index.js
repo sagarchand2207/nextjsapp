@@ -1,204 +1,223 @@
-import Head from 'next/head'
+import React, { Component, PureComponent } from "react";
+import bg1 from "../static/images/bg_1.jpg";
+import bg2 from "../static/images/bg_2.jpg";
+import { requestMenuList } from "../redux/actions";
+import { connect } from "react-redux";
+import ImageCarousel from "../components/ImageCarousel";
+import Navbar from "../components/Navbar";
 
-export default function Home() {
-  return (
-    <div className="container">
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+class Home extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      days: 0,
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
+    };
+    this.timer = null;
+    this.options = {
+      loop: true,
+      autoplay: true,
+      margin: 0,
+      animateOut: "fadeOut",
+      animateIn: "fadeIn",
+      nav: false,
+      autoplayHoverPause: false,
+      items: 1,
+      navText: [
+        "<span class='ion-md-arrow-back'></span>",
+        "<span class='ion-chevron-right'></span>",
+      ],
+      responsive: {
+        0: {
+          items: 1,
+        },
+        600: {
+          items: 1,
+        },
+        1000: {
+          items: 1,
+        },
+      },
+    };
+  }
+  componentDidMount() {
+    this.props.requestMenuList();
+        this.timer = setInterval(
+      () => {
+        this.makeTimer()
+      },
+      1000
+    );
+  }
 
-      <main>
-        <h1 className="title">
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+  makeTimer = () => {
+    var endTime = new Date("21 December 2019 9:56:00 GMT+01:00");
+    endTime = Date.parse(endTime) / 1000;
 
-        <p className="description">
-          Get started by editing <code>pages/index.js</code>
-        </p>
+    var now = new Date();
+    now = Date.parse(now) / 1000;
 
-        <div className="grid">
-          <a href="https://nextjs.org/docs" className="card">
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+    var timeLeft = endTime - now;
 
-          <a href="https://nextjs.org/learn" className="card">
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
+    var days = Math.floor(timeLeft / 86400);
+    var hours = Math.floor((timeLeft - days * 86400) / 3600);
+    var minutes = Math.floor((timeLeft - days * 86400 - hours * 3600) / 60);
+    var seconds = Math.floor(
+      timeLeft - days * 86400 - hours * 3600 - minutes * 60
+    );
 
-          <a
-            href="https://github.com/zeit/next.js/tree/master/examples"
-            className="card"
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
+    if (hours < "10") {
+      hours = "0" + hours;
+    }
+    if (minutes < "10") {
+      minutes = "0" + minutes;
+    }
+    if (seconds < "10") {
+      seconds = "0" + seconds;
+    }
+    this.setState({
+      days,
+      hours,
+      minutes,
+      seconds,
+    });
+  };
 
-          <a
-            href="https://zeit.co/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="card"
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with ZEIT Now.
-            </p>
-          </a>
-        </div>
-      </main>
+  componentWillUnmount() {
+    window.clearInterval(this.timer);
+  }
 
-      <footer>
-        <a
-          href="https://zeit.co?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by <img src="/zeit.svg" alt="ZEIT Logo" />
-        </a>
-      </footer>
+  render() {
+    const { days, hours, minutes, seconds } = this.state;
+    return (
+      <div className="">
+        <main>
+          <Navbar/>
+          <section id="home-section" className="hero js-fullheight">
+            <h3 className="vr">
+              <span>Welcome</span> to MeetUp.
+            </h3>
+            <div id="timer" className="text-center">
+              <div className="time" id="days">
+                {days}
+                <span>Days</span>
+              </div>
+              <div className="time" id="hours">
+                {hours}
+                <span>Hours</span>
+              </div>
+              <div className="time" id="minutes">
+                {minutes}
+                <span>Minutes</span>
+              </div>
+              <div className="time" id="seconds">
+                {seconds}
+                <span>Seconds</span>
+              </div>
+            </div>
+            <ImageCarousel
+              className=" owl-carousel home-slider js-fullheight"
+              options={this.options}
+            >
+              <div className="slider-item js-fullheight">
+                <div className="overlay"></div>
+                <div className="container-fluid px-0">
+                  <div
+                    className="row d-md-flex no-gutters slider-text js-fullheight align-items-end justify-content-end"
+                    data-scrollax-parent="true"
+                  >
+                    <div
+                      className="first-carousel one-third order-md-last js-fullheight img"
+                      // style="background-image:url(images/bg_1.jpg);"
+                      style={{
+                        backgroundImage: `url(${bg1})`,
+                      }}
+                    >
+                      <div className="overlay"></div>
+                    </div>
+                    <div
+                      className=" one-forth js-fullheight d-flex align-items-start align-items-md-center ftco-animate"
+                      data-scrollax=" properties: { translateY: '70%' }"
+                    >
+                      <div className=" text mt-4 mt-md-0">
+                        <h1 className=" mb-4">
+                          Annual <span>Conference</span> 2019
+                        </h1>
+                        <h2 className=" mb-4">
+                          November 26-30, 2019 - 08:00am-12:00pm
+                        </h2>
+                        <p>
+                          <a href="#" className=" btn btn-primary py-3 px-4">
+                            Get Ticket
+                          </a>{" "}
+                          <a href="#" className=" btn btn-white py-3 px-4">
+                            Watch Video
+                          </a>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-      <style jsx>{`
-        .container {
-          min-height: 100vh;
-          padding: 0 0.5rem;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-
-        main {
-          padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-
-        footer {
-          width: 100%;
-          height: 100px;
-          border-top: 1px solid #eaeaea;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        footer img {
-          margin-left: 0.5rem;
-        }
-
-        footer a {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        a {
-          color: inherit;
-          text-decoration: none;
-        }
-
-        .title a {
-          color: #0070f3;
-          text-decoration: none;
-        }
-
-        .title a:hover,
-        .title a:focus,
-        .title a:active {
-          text-decoration: underline;
-        }
-
-        .title {
-          margin: 0;
-          line-height: 1.15;
-          font-size: 4rem;
-        }
-
-        .title,
-        .description {
-          text-align: center;
-        }
-
-        .description {
-          line-height: 1.5;
-          font-size: 1.5rem;
-        }
-
-        code {
-          background: #fafafa;
-          border-radius: 5px;
-          padding: 0.75rem;
-          font-size: 1.1rem;
-          font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-            DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-        }
-
-        .grid {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-wrap: wrap;
-
-          max-width: 800px;
-          margin-top: 3rem;
-        }
-
-        .card {
-          margin: 1rem;
-          flex-basis: 45%;
-          padding: 1.5rem;
-          text-align: left;
-          color: inherit;
-          text-decoration: none;
-          border: 1px solid #eaeaea;
-          border-radius: 10px;
-          transition: color 0.15s ease, border-color 0.15s ease;
-        }
-
-        .card:hover,
-        .card:focus,
-        .card:active {
-          color: #0070f3;
-          border-color: #0070f3;
-        }
-
-        .card h3 {
-          margin: 0 0 1rem 0;
-          font-size: 1.5rem;
-        }
-
-        .card p {
-          margin: 0;
-          font-size: 1.25rem;
-          line-height: 1.5;
-        }
-
-        @media (max-width: 600px) {
-          .grid {
-            width: 100%;
-            flex-direction: column;
-          }
-        }
-      `}</style>
-
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
-        }
-
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
-    </div>
-  )
+              <div className="slider-item js-fullheight">
+                <div className="overlay"></div>
+                <div className="container-fluid px-0">
+                  <div
+                    className="row d-flex no-gutters slider-text js-fullheight align-items-end justify-content-end"
+                    data-scrollax-parent="true"
+                  >
+                    <div
+                      className="second-carousel one-third order-md-last js-fullheight img"
+                      // style="background-image:url(images/bg_2.jpg);"
+                      style={{
+                        backgroundImage: `url(${bg2})`,
+                      }}
+                    >
+                      <div className="overlay"></div>
+                    </div>
+                    <div
+                      className="one-forth js-fullheight d-flex align-items-start align-items-md-center ftco-animate"
+                      data-scrollax=" properties: { translateY: '70%' }"
+                    >
+                      <div className="text mt-4 mt-md-0">
+                        <h1 className="mb-4">
+                          Business <span>Conference</span> 2019
+                        </h1>
+                        <h2 className="mb-4">
+                          November 26-30, 2019 - 08:00am-12:00pm
+                        </h2>
+                        <p>
+                          <a href="#" className="btn btn-primary py-3 px-4">
+                            Get Ticket
+                          </a>{" "}
+                          <a href="#" className="btn btn-white py-3 px-4">
+                            Watch Video
+                          </a>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ImageCarousel>
+          </section>
+        </main>
+      </div>
+    );
+  }
 }
+const mapStateToProps = (state) => {
+  return {
+    navItems: state.nav,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    requestMenuList: () => dispatch(requestMenuList()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
