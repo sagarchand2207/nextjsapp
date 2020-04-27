@@ -66,7 +66,7 @@ export default function ContactDetails(props) {
                     </div>
                   </div>
                   <div className="col-md-12 d-flex justify-content-center">
-                    <div className="col-md-4">
+                    <div className="col-md-4 d-flex justify-content-center">
                       <button className="btn btn-primary py-3 px-5"
                       onClick={(e)=>{
                         dispatch(clearForm({}));

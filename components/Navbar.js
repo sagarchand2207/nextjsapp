@@ -8,10 +8,12 @@ import Link from "next/link";
 
 const Navbar = React.memo(function Navbar() {
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(requestMenuList());
-  }, []);
   const menu = useSelector((state) => state.nav);
+  useEffect(() => {
+    if (!menu.data.length) {
+      dispatch(requestMenuList());
+    }
+  }, []);
   const { data } = menu;
   return (
     <nav className="nav-bar">
@@ -27,9 +29,9 @@ const Navbar = React.memo(function Navbar() {
           </Link>
         </li>
         {data.length &&
-          data.map((element) => {
+          data.map((element, i) => {
             return (
-              <li className="dropdown spriteMenu">
+              <li key={i} className="dropdown spriteMenu">
                 <a
                   href={`${CONFIG.NAV_BASE_URL}/hdfcsmartbuy/category/${element.url}`}
                 >
@@ -45,6 +47,7 @@ const Navbar = React.memo(function Navbar() {
                   {element.subMenu.map((dat, i) => {
                     return (
                       <a
+                        key={i}
                         className="dropdown-item"
                         href={`${CONFIG.NAV_BASE_URL}/hdfcsmartbuy/${element.subMenuHref[i]}`}
                       >

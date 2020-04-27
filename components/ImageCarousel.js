@@ -6,10 +6,15 @@ import "react-owl-carousel2/lib/styles.css";
 export default class ImageCarousel extends PureComponent {
   constructor(props) {
     super(props);
+    this.state = {
+      mounted: false,
+    };
   }
   componentDidMount() {
-    window.jQuery = $;
-    window.$ = $;
+    this.setState({ mounted: true });
+  }
+  componentWillUnmount() {
+    this.setState({ mounted: false });
   }
   shouldComponentUpdate() {
     return false;
