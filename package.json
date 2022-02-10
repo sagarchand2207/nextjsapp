@@ -17,7 +17,7 @@
     "next-images": "^1.4.0",
     "next-redux-wrapper": "^6.0.0-rc.7",
     "next-transpile-modules": "^3.2.0",
-    "node-sass": "^4.14.0",
+    "node-sass": "^7.0.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-owl-carousel2": "^0.3.0",
